@@ -17,10 +17,11 @@ jobs:
         with:
           python-version: '3.10'
 
-      - name: Install Docker
+      - name: Install Docker (via official Docker installation script)
         run: |
-          sudo apt-get update
-          sudo apt-get install -y docker.io
+          curl -fsSL https://get.docker.com -o get-docker.sh
+          sudo sh get-docker.sh
+          docker --version  # Verify Docker installation
 
       - name: Install Docker Compose
         run: |
