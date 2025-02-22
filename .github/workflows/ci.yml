@@ -41,24 +41,34 @@ jobs:
 
       - name: Wait for PostgreSQL to be ready
         run: |
-          until pg_isready -h postgres -U postgres -d ecommerce_db; do
-            echo "Waiting for PostgreSQL..."
-            sleep 2
+          echo "Waiting for PostgreSQL to be ready..."
+          for i in {1..30}; do  # Retry up to 30 times
+            if docker exec postgres pg_isready -U postgres -d ecommerce_db; then
+              echo "PostgreSQL is ready!"
+              break
+            else
+              echo "Waiting for PostgreSQL at postgres:5432..."
+              sleep 10  # Increase sleep time
+            fi
           done
+
+      - name: Check PostgreSQL Logs
+        run: |
+          docker logs postgres
 
       - name: Apply migrations
         run: |
           source venv/bin/activate
           python manage.py migrate
         env:
-          DB_HOST: postgres
+          DB_HOST: postgres  # Corrected to use the service name in Docker network
 
       - name: Run Tests
         run: |
           source venv/bin/activate
           python manage.py test
         env:
-          DB_HOST: postgres
+          DB_HOST: postgres  # Corrected to use the service name in Docker network
 
       - name: Build Docker Image
         run: docker build -f Dockerfile -t ecommerce-backend .
