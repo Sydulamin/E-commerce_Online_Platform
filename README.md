@@ -88,7 +88,7 @@ This project includes a CI pipeline that is triggered on every push to the `main
 
 ### GitHub Actions Workflow
 
-- The workflow file is located at `.github/workflows/django-ci-pipeline.yml`.
+- The workflow file is located at `.github/workflows/ci.yml`.
 - It installs Docker, Docker Compose, and Python dependencies.
 - It runs tests after the setup step to ensure that the project is working as expected.
 
