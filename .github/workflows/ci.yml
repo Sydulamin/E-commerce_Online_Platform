@@ -37,7 +37,6 @@ jobs:
         run: |
           python -m venv venv
           source venv/bin/activate
-          pip install --upgrade pip
           pip install -r requirments.txt
 
       - name: Wait for PostgreSQL to be ready
@@ -51,11 +50,15 @@ jobs:
         run: |
           source venv/bin/activate
           python manage.py migrate
+        env:
+          DB_HOST: localhost  # ✅ Ensure correct database connection
 
       - name: Run Tests
         run: |
           source venv/bin/activate
           python manage.py test
+        env:
+          DB_HOST: localhost  # ✅ Ensure correct database connection
 
       - name: Check Dockerfile
         run: |
