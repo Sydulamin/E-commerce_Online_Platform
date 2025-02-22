@@ -43,7 +43,7 @@ jobs:
         run: |
           echo "Waiting for PostgreSQL to be ready..."
           for i in {1..30}; do  # Retry up to 30 times
-            if docker exec -T $(docker ps -q --filter "ancestor=postgres") pg_isready -U postgres -d ecommerce_db; then
+            if docker exec $(docker ps -q --filter "ancestor=postgres") pg_isready -U postgres -d ecommerce_db; then
               echo "PostgreSQL is ready!"
               break
             else
