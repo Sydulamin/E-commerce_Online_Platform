@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
-from urllib.parse import urlparse
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -90,17 +89,16 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 #     }
 # }
 
-DATABASE_URL = os.getenv('DATABASE_URL')
-url = urlparse(DATABASE_URL)
+# DATABASE_URL = os.getenv('DATABASE_URL')
 
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
-        'NAME': url.path[1:],
-        'USER': url.username,
-        'PASSWORD': url.password,
-        'HOST': url.hostname,
-        'PORT': url.port,
+        'NAME': os.getenv('POSTGRES_DB', 'ecommerce_db'),
+        'USER': os.getenv('POSTGRES_USER', 'postgres'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD', 'postgres'),
+        'HOST': os.getenv('DB_HOST', 'postgres'),  # Use service name here
+        'PORT': os.getenv('POSTGRES_PORT', '5432'),
     }
 }
 

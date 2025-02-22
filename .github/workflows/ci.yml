@@ -52,23 +52,19 @@ jobs:
             fi
           done
 
-      - name: Check PostgreSQL Logs
-        run: |
-          docker logs $(docker ps -q --filter "ancestor=postgres")
-
       - name: Apply migrations
         run: |
           source venv/bin/activate
           python manage.py migrate
         env:
-          DB_HOST: postgres  # Corrected to use the service name in Docker network
+          DB_HOST: postgres  # Correct to use service name for DB_HOST
 
       - name: Run Tests
         run: |
           source venv/bin/activate
           python manage.py test
         env:
-          DB_HOST: postgres  # Corrected to use the service name in Docker network
+          DB_HOST: postgres  # Correct to use service name for DB_HOST
 
       - name: Build Docker Image
         run: docker build -f Dockerfile -t ecommerce-backend .
