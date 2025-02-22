@@ -6,7 +6,7 @@ This project is a simple e-commerce platform built using Django, with a PostgreS
 ## Project Structure
 
 - **`docker-compose.yml`**: Defines the services for the PostgreSQL database and Django application.
-- **`.github/workflows/django-ci-pipeline.yml`**: Defines the GitHub Actions CI/CD pipeline for testing and building the project.
+- **`.github/workflows/ci.yml`**: Defines the GitHub Actions CI/CD pipeline for testing and building the project.
 - **`requirements.txt`**: Contains all Python dependencies required to run the project.
 
 ## Features
