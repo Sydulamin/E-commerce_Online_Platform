@@ -9,6 +9,7 @@ services:
       POSTGRES_DB: ecommerce_db
     ports:
       - "5432:5432"
+  
   web:
     build: .
     depends_on:
@@ -17,3 +18,5 @@ services:
       - "8000:8000"
     environment:
       DATABASE_URL: postgres://postgres:postgres@db:5432/ecommerce_db
+      # Add other environment variables for Django, such as:
+      # DJANGO_SECRET_KEY, DEBUG, etc.
