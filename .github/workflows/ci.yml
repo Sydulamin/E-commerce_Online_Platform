@@ -1,0 +1,72 @@
+name: CI Pipeline
+
+on:
+  push:
+    branches:
+      - 'feature/*'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:latest
+        env:
+          POSTGRES_DB: ecommerce_db
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd="pg_isready -U postgres"
+          --health-interval=10s
+          --health-timeout=5s
+          --health-retries=5
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Set up Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: '3.9'
+
+      - name: Install dependencies
+        run: |
+          python -m venv venv
+          source venv/bin/activate
+          pip install -r requirements.txt
+
+      - name: Wait for PostgreSQL to be ready
+        run: |
+          until pg_isready -h localhost -U postgres -d ecommerce_db; do
+            echo "Waiting for PostgreSQL..."
+            sleep 2
+          done
+
+      - name: Apply migrations
+        run: |
+          source venv/bin/activate
+          python manage.py migrate
+
+      - name: Run Tests
+        run: |
+          source venv/bin/activate
+          python manage.py test
+
+      - name: Check Dockerfile
+        run: |
+          docker build -f Dockerfile -t ecommerce-backend .
+
+      - name: Check Docker Image
+        run: |
+          docker run -d --name ecommerce-backend -p 8000:8000 ecommerce-backend
+          sleep 5
+          curl --fail http://localhost:8000/api/products/ || exit 1
+          docker stop ecommerce-backend
+          docker rm ecommerce-backend
+
+      - name: Clean up
+        run: docker system prune -f
