@@ -21,10 +21,8 @@ services:
       - "8000:8000"
     environment:
       DATABASE_URL: postgres://postgres:postgres@db:5432/ecommerce_db
-      DJANGO_SECRET_KEY: your_django_secret_key
+      DJANGO_SECRET_KEY: 'django-insecure-ouxs^76dj4jg(__a#onvit@s8ur&1w--ly(fl2d#0e!*dux&(^'
       DEBUG: 'True'
-      # Add other environment variables for Django, such as:
-      # DJANGO_ALLOWED_HOSTS, DATABASE_URL, etc.
     networks:
       - my_network
 
