@@ -22,7 +22,8 @@ services:
     environment:
       DATABASE_URL: postgres://postgres:postgres@db:5432/ecommerce_db
       DJANGO_SECRET_KEY: 'django-insecure-ouxs^76dj4jg(__a#onvit@s8ur&1w--ly(fl2d#0e!*dux&(^'
-      DEBUG: 'True'
+      SKIP_POSTGRES_TEST: 'true' 
+
     networks:
       - my_network
 
