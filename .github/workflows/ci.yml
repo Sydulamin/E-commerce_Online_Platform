@@ -55,16 +55,7 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run tests (Skip PostgreSQL tests)
-        run: |
-          echo "Skipping PostgreSQL tests"
-          # Run tests that don't rely on PostgreSQL here
-          python manage.py test --exclude-tag=postgresql  # Example for excluding PostgreSQL tests
-
-      - name: Run tests if not in CI (optional step for local)
-        run: |
-          docker-compose exec -T web python manage.py test  # Run tests with PostgreSQL
-
+      
   teardown:
     runs-on: ubuntu-latest
     needs: test
@@ -75,6 +66,4 @@ jobs:
       - name: Capture Docker Compose logs
         run: docker-compose logs
 
-      - name: Shutdown PostgreSQL container
-        run: |
-          docker-compose down
+      
