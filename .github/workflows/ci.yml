@@ -28,15 +28,12 @@ jobs:
           pip install -r requirements.txt
 
       - name: Set up PostgreSQL container (if not CI)
-        if: ${{ env.CI != 'true' }}
         run: |
           docker-compose -f docker-compose.yml up -d postgres
 
   test:
     runs-on: ubuntu-latest
     needs: setup
-    environment:
-      CI: true  # Ensures PostgreSQL-related tests are skipped
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
@@ -51,25 +48,26 @@ jobs:
           python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Run tests (Skip PostgreSQL tests in CI)
+      - name: Run tests (Skip PostgreSQL tests)
         run: |
-          if [[ "$CI" == "true" ]]; then
-            echo "Skipping PostgreSQL tests in CI"
-            # You can run any other tests here that don't depend on PostgreSQL
-          else
-            python manage.py test
-          fi
-          
+          echo "Skipping PostgreSQL tests"
+          # Run tests that don't rely on PostgreSQL here
+          python manage.py test --exclude-tag=postgresql  # Example for excluding PostgreSQL tests
+
       - name: Run tests if not in CI (optional step for local)
-        if: ${{ env.CI != 'true' }}
         run: |
           docker-compose exec -T web python manage.py test  # Run tests with PostgreSQL
 
   teardown:
     runs-on: ubuntu-latest
     needs: test
-    if: ${{ env.CI != 'true' }}  # Skip in CI
     steps:
+      - name: Check Docker Compose services status
+        run: docker-compose ps
+
+      - name: Capture Docker Compose logs
+        run: docker-compose logs
+
       - name: Shutdown PostgreSQL container
         run: |
           docker-compose down
