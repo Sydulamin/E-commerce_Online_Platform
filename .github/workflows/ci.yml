@@ -51,24 +51,31 @@ jobs:
           source venv/bin/activate
           python manage.py migrate
         env:
-          DB_HOST: localhost  # ✅ Ensure correct database connection
+          DB_HOST: localhost  
 
       - name: Run Tests
         run: |
           source venv/bin/activate
           python manage.py test
         env:
-          DB_HOST: localhost  # ✅ Ensure correct database connection
+          DB_HOST: localhost  
 
-      - name: Check Dockerfile
-        run: |
-          docker build -f Dockerfile -t ecommerce-backend .
+      - name: Build Docker Image
+        run: docker build -f Dockerfile -t ecommerce-backend .
 
-      - name: Check Docker Image
+      - name: Run Docker Container (Wait for Startup)
         run: |
           docker run -d --name ecommerce-backend -p 8000:8000 ecommerce-backend
-          sleep 5
-          curl --fail http://localhost:8000/api/products/ || exit 1
+          echo "Waiting for container to start..."
+          sleep 15  # ⏳ Increase wait time before checking health
+          docker logs ecommerce-backend  # 🔍 Show logs for debugging
+
+      - name: Check If API is Running
+        run: |
+          curl --retry 5 --retry-delay 5 --fail http://localhost:8000/api/products/ || exit 1
+
+      - name: Stop and Remove Container
+        run: |
           docker stop ecommerce-backend
           docker rm ecommerce-backend
 
