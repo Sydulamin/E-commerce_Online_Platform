@@ -63,6 +63,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      - name: Clean up Docker (remove conflicting packages)
+        run: |
+          sudo apt-get remove --purge -y docker docker-engine docker.io containerd runc
+          sudo apt-get autoremove -y
+          sudo apt-get clean
+
       - name: Install Docker and Docker Compose
         run: |
           sudo apt-get update
