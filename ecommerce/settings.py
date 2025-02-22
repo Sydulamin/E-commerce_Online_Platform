@@ -12,7 +12,6 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
-from urllib.parse import urlparse
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -92,20 +91,19 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 
 # DATABASE_URL = os.getenv('DATABASE_URL')
 
-DATABASE_URL = os.getenv('DATABASE_URL')
 
-parsed_url = urlparse(DATABASE_URL)
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql',
-        'NAME': os.getenv('DB_NAME', 'ecommerce_db'),
-        'USER': os.getenv('DB_USER', 'postgres'),
-        'PASSWORD': os.getenv('DB_PASSWORD', 'postgres'),
-        'HOST': os.getenv('DB_HOST', 'db'),  # db is the service name in docker-compose
-        'PORT': os.getenv('DB_PORT', '5432'),
+        'ENGINE': 'django.db.backends.postgresql',  
+        'NAME': 'ecommerce_db',                     
+        'USER': 'postgres',                     
+        'PASSWORD': 'postgres',             
+        'HOST': 'localhost',                        
+        'PORT': '5432',                             
     }
 }
+
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
 
