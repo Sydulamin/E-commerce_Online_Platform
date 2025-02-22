@@ -82,27 +82,27 @@ WSGI_APPLICATION = 'ecommerce.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     'default': {
-#         'ENGINE': 'django.db.backends.sqlite3',
-#         'NAME': BASE_DIR / 'db.sqlite3',
-#     }
-# }
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': BASE_DIR / 'db.sqlite3',
+    }
+}
 
 # DATABASE_URL = os.getenv('DATABASE_URL')
 
 
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql',  
-        'NAME': 'ecommerce_db',                     
-        'USER': 'postgres',                     
-        'PASSWORD': 'postgres',             
-        'HOST': 'localhost',                        
-        'PORT': '5432',                             
-    }
-}
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.postgresql',  
+#         'NAME': 'ecommerce_db',                     
+#         'USER': 'postgres',                     
+#         'PASSWORD': 'postgres',             
+#         'HOST': 'localhost',                        
+#         'PORT': '5432',                             
+#     }
+# }
  #final git push
 # Password validation
 # https://docs.djangoproject.com/en/5.1/ref/settings/#auth-password-validators
